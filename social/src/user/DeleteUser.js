@@ -21,7 +21,7 @@ export default class DeleteUser extends Component {
                     // signout user
                     signout(() => console.log("User is deleted"))
                     // redirect
-                    this.setState({redirect: true})
+                    this.setState({ redirect: true })
                 }
             })
 
@@ -36,17 +36,16 @@ export default class DeleteUser extends Component {
     }
 
     render() {
-        if(this.state.redirect){
+        if (this.state.redirect) {
             return <Redirect to="/" />
         }
         return (
-            <div>
-                <button
-                    onClick={this.deleteConfirmed}
-                    className="btn btn-raised btn-danger">
-                    Delete Profile
-                    </button>
-            </div>
+
+            <button
+                onClick={this.deleteConfirmed}
+                className="btn btn-raised btn-danger">
+                Delete Profile
+            </button>
         )
     }
 }

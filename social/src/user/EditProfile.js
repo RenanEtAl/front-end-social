@@ -179,7 +179,6 @@ export default class EditProfile extends Component {
                     <h2>Loading...</h2>
                 </div>) : ("")}
 
-
                 <img
                     style={{ height: "200px", width: "auto" }}
                     className="img-thumbnail"
