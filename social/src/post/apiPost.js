@@ -95,3 +95,45 @@ export const update = (postId, token, post) => {
             console.log(err)
         )
 }
+// which user likes post
+export const like = (userId, token, postId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/like`, {
+        // put userId in the likes array
+        method: 'PUT',
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            // get the token from local storage
+            Authorization: `Bearer ${token}`
+        },
+        // send userId and postId
+        body: JSON.stringify({ userId, postId })
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err =>
+            console.log(err)
+        )
+}
+
+// which user unlikes post
+export const unlike = (userId, token, postId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/unlike`, {
+        method: 'PUT',
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            // get the token from local storage
+            Authorization: `Bearer ${token}`
+        },
+        // send userId and postId
+        body: JSON.stringify({ userId, postId })
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err =>
+            console.log(err)
+        )
+}
