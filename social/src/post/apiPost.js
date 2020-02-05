@@ -137,3 +137,45 @@ export const unlike = (userId, token, postId) => {
             console.log(err)
         )
 }
+
+export const comment = (userId, token, postId, comment) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/comment`, {
+        // put userId in the likes array
+        method: 'PUT',
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            // get the token from local storage
+            Authorization: `Bearer ${token}`
+        },
+        // send userId, postId, comment
+        body: JSON.stringify({ userId, postId, comment })
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err =>
+            console.log(err)
+        )
+}
+
+export const uncomment = (userId, token, postId, comment) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/post/uncomment`, {
+        // put userId in the likes array
+        method: 'PUT',
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            // get the token from local storage
+            Authorization: `Bearer ${token}`
+        },
+        // send userId, postId, comment
+        body: JSON.stringify({ userId, postId, comment })
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err =>
+            console.log(err)
+        )
+}

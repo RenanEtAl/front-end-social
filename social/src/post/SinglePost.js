@@ -3,6 +3,7 @@ import { singlePost, remove, like, unlike } from './apiPost'
 import { Link, Redirect } from 'react-router-dom'
 import DefaultPost from '../images/cat.jpg'
 import { isAuthenticated } from '../auth'
+import Comment from './Comment'
 
 export default class SinglePost extends Component {
 
@@ -12,8 +13,8 @@ export default class SinglePost extends Component {
         // if the user has liked a false
         like: false,
         likes: 0,
-        redirectToSignin: false
-
+        redirectToSignin: false,
+        comments: []
 
     }
 
@@ -23,7 +24,13 @@ export default class SinglePost extends Component {
             if (data.error) {
                 console.log(data.error)
             } else {
-                this.setState({ post: data, likes: data.likes.length, like: this.checkLike(data.likes) })
+                console.log('COMMENTING USER IN SINGLE POST', data);
+                this.setState({
+                    post: data,
+                    likes: data.likes.length,
+                    like: this.checkLike(data.likes),
+                    comments: data.comments
+                })
             }
         })
     }
@@ -53,10 +60,10 @@ export default class SinglePost extends Component {
     }
     // put request to the backend
     likeToggle = () => {
-        if(!isAuthenticated()) {
-            this.setState({redirectToSignin: true})
+        if (!isAuthenticated()) {
+            this.setState({ redirectToSignin: true })
             return false
-        } 
+        }
         // if the state is true, send PUT request unlike, otherwise send like
         let callApi = this.state.like ? unlike : like
 
@@ -75,6 +82,9 @@ export default class SinglePost extends Component {
             }
         })
 
+    }
+    updateComments = comments => {
+        this.setState({ comments })
     }
 
     renderPost = (post) => {
@@ -146,12 +156,13 @@ export default class SinglePost extends Component {
 
         )
     }
+
     render() {
-        const { post, redirectToHome, redirectToSignin } = this.state
+        const { post, redirectToHome, redirectToSignin, comments } = this.state
 
         if (redirectToHome) {
             return <Redirect to={`/`} />
-        } else if( redirectToSignin){
+        } else if (redirectToSignin) {
             return <Redirect to={'/signin'} />
         }
         return (
@@ -163,6 +174,11 @@ export default class SinglePost extends Component {
                 </div>) : (
                         this.renderPost(post)
                     )}
+
+                <Comment 
+                postId={post._id} 
+                comments={comments.reverse()} 
+                updateComments={this.updateComments} />
 
 
             </div>

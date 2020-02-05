@@ -12,6 +12,8 @@ import FindPeople from './user/FindPeople'
 import NewPost from './post/NewPost'
 import SinglePost from './post/SinglePost'
 import EditPost from './post/EditPost'
+import ForgotPassword from "./user/ForgotPassword"
+import ResetPassword from './user/ResetPassword'
 // works like a wrapper for the entire component
 
 const MainRouter = () => (
@@ -25,6 +27,8 @@ const MainRouter = () => (
             <Route exact path="/users" component={Users}></Route>
             <Route exact path="/signup" component={Signup}></Route>
             <Route exact path="/signin" component={Signin}></Route>
+            <Route exact path="/forgot-password" component={ForgotPassword}></Route>
+            <Route exact path="/reset-password/:resetPasswordToken" component={ResetPassword}></Route>
             <PrivateRoute exact path="/user/edit/:userId" component={EditProfile}/>
             <PrivateRoute exact path="/user/:userId" component={Profile}/>
             <PrivateRoute exact path="/findpeople/" component={FindPeople}/>
