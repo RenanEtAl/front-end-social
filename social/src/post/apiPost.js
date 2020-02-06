@@ -61,22 +61,19 @@ export const listByUser = (userId, token) => {
 
 export const remove = (postId, token) => {
     return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            // get the token from local storage
             Authorization: `Bearer ${token}`
         }
     })
         .then(response => {
-            return response.json()
+            return response.json();
         })
-        .catch(err =>
-            console.log(err)
-        )
+        .catch(err => console.log(err));
+};
 
-}
 
 export const update = (postId, token, post) => {
     return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {

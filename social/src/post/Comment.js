@@ -34,7 +34,7 @@ export default class Comment extends Component {
         }
 
         if (this.isValid()) {
-            const userId = isAuthenticated().user_id
+            const userId = isAuthenticated().user._id
             const token = isAuthenticated().token
             const postId = this.props.postId
             // wrap text in object and give it as a value of text
@@ -62,7 +62,7 @@ export default class Comment extends Component {
         }
 
         if (this.isValid()) {
-            const userId = isAuthenticated().user_id
+            const userId = isAuthenticated().user._id
             const token = isAuthenticated().token
             const postId = this.props.postId
             // wrap text in object and give it as a value of text

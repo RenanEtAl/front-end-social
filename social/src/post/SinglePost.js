@@ -44,13 +44,16 @@ export default class SinglePost extends Component {
     }
 
     deletePost = () => {
-        const postId = this.props.match.params.postId
-        const token = isAuthenticated().token
+        const postId = this.props.match.params.postId;
+        const token = isAuthenticated().token;
         remove(postId, token).then(data => {
-            if (data.error) { console.log(data.error) }
-            else { this.setState({ redirectToHome: true }) }
-        })
-    }
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                this.setState({ redirectToHome: true });
+            }
+        });
+    };
 
     deleteConfirmed = () => {
         let answer = window.confirm("Are you sure you want to delete your account?")
@@ -175,10 +178,10 @@ export default class SinglePost extends Component {
                         this.renderPost(post)
                     )}
 
-                <Comment 
-                postId={post._id} 
-                comments={comments.reverse()} 
-                updateComments={this.updateComments} />
+                <Comment
+                    postId={post._id}
+                    comments={comments.reverse()}
+                    updateComments={this.updateComments} />
 
 
             </div>
