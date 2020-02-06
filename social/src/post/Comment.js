@@ -56,31 +56,19 @@ export default class Comment extends Component {
     }
 
     deleteComment = (comment) => {
-        if (!isAuthenticated()) {
-            this.setState({ error: "Please signin to leave a comment" })
-            return false // so the code does not executed
-        }
+        const userId = isAuthenticated().user._id;
+        const token = isAuthenticated().token;
+        const postId = this.props.postId;
 
-        if (this.isValid()) {
-            const userId = isAuthenticated().user._id
-            const token = isAuthenticated().token
-            const postId = this.props.postId
-            // wrap text in object and give it as a value of text
-            // because of the way it's implemented in the backend
-            uncomment(userId, token, postId, comment)
-                .then(data => {
-                    if (data.error) {
-                        console.log(data.error)
-                    } else {
-                        // dispatch fresh list of comments to parent (SinglePost)
-                        this.props.updateComments(data.comments)
-                    }
-                })
+        uncomment(userId, token, postId, comment).then(data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                this.props.updateComments(data.comments);
+            }
+        });
+    };
 
-        }
-
-
-    }
 
     deleteConfirmed = (comment) => {
         let answer = window.confirm("Are you sure you want to delete your comment?")
@@ -116,7 +104,7 @@ export default class Comment extends Component {
 
                 <hr />
 
-                {/* {<div className="col-md-8-offset-2">
+                {<div className="col-md-8-offset-2">
                     <h3 className="text-primary">
                         {comments.length} Comments
                         </h3>
@@ -170,7 +158,7 @@ export default class Comment extends Component {
                         </div>
                     ))}
                 </div>
-                }} */}
+                }
 
             </div>
         )

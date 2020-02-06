@@ -56,11 +56,11 @@ export default class SinglePost extends Component {
     };
 
     deleteConfirmed = () => {
-        let answer = window.confirm("Are you sure you want to delete your account?")
+        let answer = window.confirm('Are you sure you want to delete your post?');
         if (answer) {
-            this.deletePost()
+            this.deletePost();
         }
-    }
+    };
     // put request to the backend
     likeToggle = () => {
         if (!isAuthenticated()) {
