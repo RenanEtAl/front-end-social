@@ -129,14 +129,14 @@ export default class EditPost extends Component {
 
 
     render() {
-        const { id, title, body, redirectToProfile, error, loading } = this.state
+        const { id, title, body, redirectToProfile, error, loading, name, email, password, about } = this.state
         if (redirectToProfile) {
             return <Redirect to={`/user/${isAuthenticated().user._id}`} />
         }
         return (
             <div className="container" >
                 <h2 className="mt-5 mb-5">{title}</h2>
-                
+
                 <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>{error}</div>
 
                 {loading ? (<div className="jumbotron text-center">
@@ -146,9 +146,12 @@ export default class EditPost extends Component {
                 <img
                     style={{ height: "200px", width: "auto" }}
                     className="img-thumbnail"
-                    src={`${process.env.REACT_APP_API_URL}/post/photo/${id}}?${new Date().getTime()}`} 
+                    src={`${process.env.REACT_APP_API_URL}/post/photo/${id}}?${new Date().getTime()}`}
                     onError={index => (index.target.src = `${DefaultPost}`)} alt={title} />
-                {this.editPostForm(title, body)}
+                
+                {isAuthenticated().user.role === "admin" ||
+                    (isAuthenticated().user._id === id &&
+                        this.signupForm(name, email, password, about))}
             </div>
         )
     }

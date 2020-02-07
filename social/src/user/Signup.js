@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { signup } from '../auth'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 class Signup extends Component {
     // state to hold and store the value
     constructor() {
@@ -11,7 +11,8 @@ class Signup extends Component {
             password: "",
             error: "",
             // successful message
-            open: false
+            open: false,
+            recaptcha: false
         }
     }
     // higher order function
@@ -32,25 +33,61 @@ class Signup extends Component {
             email: email,
             password: password
         }
-        signup(user)
-            // get response
-            .then(data => {
+        // console.log(user);
+        if (this.state.recaptcha) {
+            signup(user).then(data => {
                 if (data.error) this.setState({ error: data.error });
-                else this.setState({
-                    error: "",
-                    name: "",
-                    email: "",
-                    password: "",
-                    // successful message
-                    open: true
-                })
-            })
+                else
+                    this.setState({
+                        error: "",
+                        name: "",
+                        email: "",
+                        password: "",
+                        open: true
+                    });
+            });
+        } else {
+            this.setState({
+                error: "What day is today? Please write a correct answer!"
+            });
+        }
+    };
 
-    }
+    recaptchaHandler = e => {
+        this.setState({ error: "" });
+        let userDay = e.target.value.toLowerCase();
+        let dayCount;
+
+        if (userDay === "sunday") {
+            dayCount = 0;
+        } else if (userDay === "monday") {
+            dayCount = 1;
+        } else if (userDay === "tuesday") {
+            dayCount = 2;
+        } else if (userDay === "wednesday") {
+            dayCount = 3;
+        } else if (userDay === "thursday") {
+            dayCount = 4;
+        } else if (userDay === "friday") {
+            dayCount = 5;
+        } else if (userDay === "saturday") {
+            dayCount = 6;
+        }
+
+        if (dayCount === new Date().getDay()) {
+            this.setState({ recaptcha: true });
+            return true;
+        } else {
+            this.setState({
+                recaptcha: false
+            });
+            return false;
+        }
+    };
 
 
 
-    signupForm = (name, email, password) => (
+    signupForm = (name, email, password, recaptcha) => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Name</label>
@@ -64,6 +101,17 @@ class Signup extends Component {
                 <label className="text-muted">Password</label>
                 <input onChange={this.handleChange("password")} type="password" className="form-control" value={password} />
             </div>
+            <div className="form-group">
+                <label className="text-muted">
+                    {recaptcha ? "Thanks. You got it!" : "What day is today?"}
+                </label>
+
+                <input
+                    onChange={this.recaptchaHandler}
+                    type="text"
+                    className="form-control"
+                />
+            </div>
             <button onClick={this.clickSubmit} className="btn btn-raised btn-primary">
                 Submit
             </button>
@@ -75,7 +123,7 @@ class Signup extends Component {
 
     render() {
 
-        const { name, email, password, error, open } = this.state
+        const { name, email, password, error, open, recaptcha } = this.state
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Signup</h2>
@@ -90,7 +138,7 @@ class Signup extends Component {
                 </div>
 
 
-                {this.signupForm(name, email, password)}
+                {this.signupForm(name, email, password, recaptcha)}
 
             </div>
 

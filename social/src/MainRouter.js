@@ -14,6 +14,7 @@ import SinglePost from './post/SinglePost'
 import EditPost from './post/EditPost'
 import ForgotPassword from "./user/ForgotPassword"
 import ResetPassword from './user/ResetPassword'
+import Admin from './admin/Admin'
 // works like a wrapper for the entire component
 
 const MainRouter = () => (
@@ -21,6 +22,7 @@ const MainRouter = () => (
         <Menu/>
         <Switch>
             <Route exact path="/" component={Home}></Route>
+            <PrivateRoute exact path="/admin" component={Admin}/>
             <PrivateRoute exact path="/post/create" component={NewPost}/>
             <Route exact path="/post/:postId" component={SinglePost}></Route>
             <PrivateRoute exact path="/post/edit/:postId" component={EditPost}/>

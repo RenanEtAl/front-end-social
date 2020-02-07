@@ -7,13 +7,14 @@ export default class Posts extends Component {
     constructor() {
         super()
         this.state = {
-            posts: []
+            posts: [],
+            page: 1
         }
     }
 
-    componentDidMount() {
+    loadPosts = page => {
         // list the users
-        list().then(data => {
+        list(page).then(data => {
             if (data.error) {
                 console.log(data.error)
             } else {
@@ -21,7 +22,17 @@ export default class Posts extends Component {
             }
 
         })
-
+    }
+    loadMore = number => {
+        this.setState({ page: this.state.page + number })
+        this.loadPosts(this.state.page + number)
+    }
+    loadLess = number => {
+        this.setState({ page: this.state.page - number })
+        this.loadPosts(this.state.page - number)
+    }
+    componentDidMount() {
+        this.loadPosts(this.state.page)
     }
 
     renderPosts = posts => {
@@ -67,12 +78,34 @@ export default class Posts extends Component {
 
     render() {
 
-        const { posts } = this.state
+        const { posts,page } = this.state
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">{!posts.length ? "Loading..." : "Recent Posts"}</h2>
 
                 {this.renderPosts(posts)}
+                
+                {page > 1 ? (
+                    <button
+                        className="btn btn-raised btn-warning mr-5 mt-5 mb-5"
+                        onClick={() => this.loadLess(1)}
+                    >
+                         Previous Page ({this.state.page - 1})
+                    </button>
+                ) : (
+                        ""
+                    )}
+
+                {posts.length ? (
+                    <button
+                        className="btn btn-raised btn-success mt-5 mb-5"
+                        onClick={() => this.loadMore(1)}
+                    >
+                        Next Page ({page + 1})
+                    </button>
+                ) : (
+                        ""
+                    )}
             </div>
         )
     }

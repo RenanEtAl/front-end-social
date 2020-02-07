@@ -11,7 +11,8 @@ class Signin extends Component {
             password: "",
             error: "",
             redirectToReferer: false,
-            loading: false
+            loading: false,
+            recaptcha: false
         }
     }
     // higher order function
@@ -33,7 +34,8 @@ class Signin extends Component {
             email,
             password
         }
-        signin(user)
+        if(this.state.recaptcha){
+            signin(user)
             // get response
             .then(data => {
                 if (data.error) {
@@ -45,14 +47,55 @@ class Signin extends Component {
                     authenticate(data, () => {
                         this.setState({ redirectToReferer: true })
                     })
-                }
+                } 
             })
+
+        } else {
+            this.setState({
+                loading: false,
+                error: "Wrong answer. What day is today?"
+            })
+        }
+    }
+    // get event as input and use event.target.value to get the user input
+    recaptchaHandler = (e) => {
+        this.setState({ error: "" })
+        // convert user input to lowercase
+        let userDay = e.target.value.toLowerCase()
+        let dayCount
+        // for each day, update dayCount variable with the number
+        // and use new Date().getDay() to get the current day
+        // if it's sunday it returns 0, monday => 1,.. etc
+        if (userDay === 'sunday') {
+            dayCount = 0
+        } else if (userDay === "monday") {
+            dayCount = 1;
+        } else if (userDay === "tuesday") {
+            dayCount = 2;
+        } else if (userDay === "wednesday") {
+            dayCount = 3;
+        } else if (userDay === "thursday") {
+            dayCount = 4;
+        } else if (userDay === "friday") {
+            dayCount = 5;
+        } else if (userDay === "saturday") {
+            dayCount = 6;
+        }
+        // compare the user input with today's day
+        if(dayCount === new Date().getDay()) {
+            this.setState({recaptcha: true})
+            return true
+        } else {
+            this.setState({recaptcja: false})
+        }
+
+        // return true after setting the state
+
 
     }
 
 
-
-    signinForm = (email, password) => (
+    signinForm = (email, password, recaptcha) => (
         <form>
 
             <div className="form-group">
@@ -63,6 +106,19 @@ class Signin extends Component {
                 <label className="text-muted">Password</label>
                 <input onChange={this.handleChange("password")} type="password" className="form-control" value={password} />
             </div>
+            <div className="form-group">
+                <label className="text-muted">
+                    {recaptcha ? "Thanks. You got it!" : "What day is today?"}
+                </label>
+
+                <input
+                    onChange={this.recaptchaHandler}
+                    type="text"
+                    className="form-control"
+                />
+            </div>
+
+
             <button onClick={this.clickSubmit} className="btn btn-raised btn-primary">
                 Submit
             </button>
@@ -74,7 +130,7 @@ class Signin extends Component {
 
     render() {
 
-        const { email, password, error, redirectToReferer, loading } = this.state
+        const { email, password, error, redirectToReferer, loading, recaptcha } = this.state
         if (redirectToReferer) {
             return <Redirect to="/" />
         }
@@ -85,7 +141,7 @@ class Signin extends Component {
                 {loading ? (<div className="jumbotron text-center">
                     <h2>Loading...</h2>
                 </div>) : ("")}
-                {this.signinForm(email, password)}
+                {this.signinForm(email, password, recaptcha)}
 
                 <p>
                     <Link to="/forgot-password" className="text-danger">

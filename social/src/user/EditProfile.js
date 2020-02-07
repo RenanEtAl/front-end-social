@@ -99,8 +99,13 @@ export default class EditProfile extends Component {
             update(userId, token, this.userData)
                 // get response from update method
                 .then(data => {
-                    if (data.error) this.setState({ error: data.error });
-                    else
+                    if (data.error) {
+                        this.setState({ error: data.error });
+                    } else if (isAuthenticated().user.role === "admin") {
+                        this.setState({
+                            redirectToProfile: true
+                        })
+                    } else {
                         updateUser(data, () => {
                             this.setState({
                                 // update localstorage as well
@@ -108,7 +113,7 @@ export default class EditProfile extends Component {
                             })
 
                         })
-
+                    }
                 })
         }
 
@@ -184,7 +189,10 @@ export default class EditProfile extends Component {
                     className="img-thumbnail"
                     src={photoUrl} onError={index => (index.target.src = `${DefaultProfile}`)} alt={name} />
 
-                {this.signupForm(name, email, password, about)}
+
+                {isAuthenticated().user.role === "admin" ||
+                    (isAuthenticated().user._id === id &&
+                        this.signupForm(name, email, password, about))}
 
             </div>
         )
