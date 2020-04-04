@@ -41,7 +41,7 @@ export default class Users extends Component {
                         <p className="card-text">{user.email}</p>
                         <Link
                             to={`/user/${user._id}`}
-                            className="btn btn-raised btn-primary btn-sm">View Profile
+                            className="btn btn-raised btn-dark btn-sm">View Profile
 
                         </Link>
                     </div>

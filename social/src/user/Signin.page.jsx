@@ -119,7 +119,7 @@ class Signin extends Component {
             </div>
 
 
-            <button onClick={this.clickSubmit} className="btn btn-raised btn-primary">
+            <button onClick={this.clickSubmit} className="btn btn-raised btn-dark">
                 Submit
             </button>
 
