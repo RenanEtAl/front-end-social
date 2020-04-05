@@ -1,20 +1,21 @@
 import React, { Component } from "react";
 import { list } from "./apiPost";
-import DefaultPost from "../images/cat.jpg";
+import DefaultPost from "../assets/placeholder.png";
 import { Link } from "react-router-dom";
+import SpinnerPage from "../core/spinner.component";
 
 export default class Posts extends Component {
   constructor() {
     super();
     this.state = {
       posts: [],
-      page: 1
+      page: 1,
     };
   }
 
-  loadPosts = page => {
+  loadPosts = (page) => {
     // list the users
-    list(page).then(data => {
+    list(page).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -22,11 +23,11 @@ export default class Posts extends Component {
       }
     });
   };
-  loadMore = number => {
+  loadMore = (number) => {
     this.setState({ page: this.state.page + number });
     this.loadPosts(this.state.page + number);
   };
-  loadLess = number => {
+  loadLess = (number) => {
     this.setState({ page: this.state.page - number });
     this.loadPosts(this.state.page - number);
   };
@@ -34,7 +35,7 @@ export default class Posts extends Component {
     this.loadPosts(this.state.page);
   }
 
-  renderPosts = posts => {
+  renderPosts = (posts) => {
     return (
       <div className="row">
         {posts.map((post, index) => {
@@ -47,7 +48,7 @@ export default class Posts extends Component {
                 <img
                   src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
                   alt={post.title}
-                  onError={index => (index.target.src = `${DefaultPost}`)}
+                  onError={(index) => (index.target.src = `${DefaultPost}`)}
                   className="img-thumbnail mb-3"
                   style={{ height: "200px", width: "100%" }}
                 />
@@ -77,7 +78,7 @@ export default class Posts extends Component {
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">
-          {!posts.length ? "Loading..." : "Recent Posts"}
+          {!posts.length ? <SpinnerPage /> : "Recent Posts"}
         </h2>
 
         {this.renderPosts(posts)}

@@ -71,7 +71,7 @@ const Menu = ({ history }) => (
               style={isActive(history, `/findpeople`)}
               className="nav-link"
             >
-              Find People
+              DISCOVER
             </Link>
           </li>
 
@@ -90,7 +90,10 @@ const Menu = ({ history }) => (
               className="nav-link"
               style={
                 (isActive(history, "/signout"),
-                { cursor: "pointer", color: "#fff", borderBottom: "#fff" })
+                {
+                  cursor: "pointer",
+                  color: "#fff",
+                })
               }
               onClick={() => signout(() => history.push("/"))}
             >

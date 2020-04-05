@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { comment, uncomment } from "./apiPost";
 import { isAuthenticated } from "../auth";
 import { Link } from "react-router-dom";
-import DefaultProfile from "../images/avatar.png";
+import DefaultProfile from "../assets/user.png";
 
 export default class Comment extends Component {
   state = {
     text: "",
-    error: ""
+    error: "",
   };
 
-  handleChange = event => {
+  handleChange = (event) => {
     // clear error
     this.setState({ error: "" });
     this.setState({ text: event.target.value });
@@ -24,7 +24,7 @@ export default class Comment extends Component {
     }
     return true;
   };
-  addComment = event => {
+  addComment = (event) => {
     // it will not reload when submit is clicked
     event.preventDefault();
 
@@ -39,7 +39,7 @@ export default class Comment extends Component {
       const postId = this.props.postId;
       // wrap text in object and give it as a value of text
       // because of the way it's implemented in the backend
-      comment(userId, token, postId, { text: this.state.text }).then(data => {
+      comment(userId, token, postId, { text: this.state.text }).then((data) => {
         if (data.error) {
           console.log(data.error);
         } else {
@@ -52,12 +52,12 @@ export default class Comment extends Component {
     }
   };
 
-  deleteComment = comment => {
+  deleteComment = (comment) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().token;
     const postId = this.props.postId;
 
-    uncomment(userId, token, postId, comment).then(data => {
+    uncomment(userId, token, postId, comment).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -66,7 +66,7 @@ export default class Comment extends Component {
     });
   };
 
-  deleteConfirmed = comment => {
+  deleteConfirmed = (comment) => {
     let answer = window.confirm(
       "Are you sure you want to delete your comment?"
     );
@@ -92,7 +92,7 @@ export default class Comment extends Component {
               placeholder="Speak your mind..."
             />
 
-            <button className="btn btn-raised btn-success mt-2">
+            <button className="btn btn-raised mt-2 btn-dark">
               Post Comment
             </button>
           </div>
@@ -104,8 +104,6 @@ export default class Comment extends Component {
         >
           {error}
         </div>
-
-        {JSON.stringify(comments)}
 
         <hr />
 
@@ -120,12 +118,12 @@ export default class Comment extends Component {
                     <img
                       style={{
                         borderRadius: "50%",
-                        border: "1px solid black"
+                        border: "1px solid black",
                       }}
                       className="float-left mr-2"
                       height="30px"
                       width="30px"
-                      onError={i => (i.target.src = `${DefaultProfile}`)}
+                      onError={(i) => (i.target.src = `${DefaultProfile}`)}
                       src={`${process.env.REACT_APP_API_URL}/user/photo/${comment.postedBy._id}`}
                       alt={comment.postedBy.name}
                     />
@@ -145,7 +143,7 @@ export default class Comment extends Component {
                             <>
                               <button
                                 onClick={() => this.deleteConfirmed(comment)}
-                                className="text-danger float-right mr-1"
+                                className="btn btn-raised btn-warning float-right mr-1"
                               >
                                 Delete Comment
                               </button>

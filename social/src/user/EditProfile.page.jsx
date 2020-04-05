@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { read, update, updateUser } from "./apiUser";
 import { Redirect } from "react-router-dom";
-import DefaultProfile from "../images/avatar.png";
+import DefaultProfile from "../assets/user.png";
+import SpinnerPage from "../core/spinner.component";
 
 export default class EditProfile extends Component {
   constructor() {
@@ -16,12 +17,12 @@ export default class EditProfile extends Component {
       error: "",
       fileSize: 0,
       loading: false,
-      about: ""
+      about: "",
     };
   }
-  init = userId => {
+  init = (userId) => {
     const token = isAuthenticated().token;
-    read(userId, token).then(data => {
+    read(userId, token).then((data) => {
       if (data.error) {
         // user is not authenticated, ask them to sign in
         this.setState({ redirectToProfile: true });
@@ -31,7 +32,7 @@ export default class EditProfile extends Component {
           name: data.name,
           email: data.email,
           error: "",
-          about: data.about
+          about: data.about,
         });
       }
     });
@@ -53,7 +54,7 @@ export default class EditProfile extends Component {
     if (fileSize > 100000) {
       this.setState({
         error: "File size should be less than 100kb",
-        loading: false
+        loading: false,
       });
       return false;
     }
@@ -66,7 +67,7 @@ export default class EditProfile extends Component {
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       this.setState({
         error: "A valid email address is required",
-        loading: false
+        loading: false,
       });
       return false;
     }
@@ -74,7 +75,7 @@ export default class EditProfile extends Component {
     if (password.length >= 1 && password.length <= 5) {
       this.setState({
         error: "Password must be at least 6 characters long",
-        loading: false
+        loading: false,
       });
       return false;
     }
@@ -82,7 +83,7 @@ export default class EditProfile extends Component {
   };
   // higher order function
   // event is for the onChange event
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({ error: "" });
     // grab the file input
     // this will handle the name, email, password
@@ -92,7 +93,7 @@ export default class EditProfile extends Component {
     this.userData.set(name, value);
     this.setState({ [name]: value, fileSize: fileSize });
   };
-  clickSubmit = event => {
+  clickSubmit = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
 
@@ -102,18 +103,18 @@ export default class EditProfile extends Component {
       // user object
       update(userId, token, this.userData)
         // get response from update method
-        .then(data => {
+        .then((data) => {
           if (data.error) {
             this.setState({ error: data.error });
           } else if (isAuthenticated().user.role === "admin") {
             this.setState({
-              redirectToProfile: true
+              redirectToProfile: true,
             });
           } else {
             updateUser(data, () => {
               this.setState({
                 // update localstorage as well
-                redirectToProfile: true
+                redirectToProfile: true,
               });
             });
           }
@@ -170,7 +171,7 @@ export default class EditProfile extends Component {
           value={password}
         />
       </div>
-      <button onClick={this.clickSubmit} className="btn btn-raised btn-primary">
+      <button onClick={this.clickSubmit} className="btn btn-raised btn-dark">
         Update
       </button>
     </form>
@@ -185,7 +186,7 @@ export default class EditProfile extends Component {
       redirectToProfile,
       error,
       loading,
-      about
+      about,
     } = this.state;
 
     if (redirectToProfile) {
@@ -210,19 +211,13 @@ export default class EditProfile extends Component {
           {error}
         </div>
 
-        {loading ? (
-          <div className="jumbotron text-center">
-            <h2>Loading...</h2>
-          </div>
-        ) : (
-          ""
-        )}
+        {loading ? <SpinnerPage /> : ""}
 
         <img
           style={{ height: "200px", width: "auto" }}
           className="img-thumbnail"
           src={photoUrl}
-          onError={index => (index.target.src = `${DefaultProfile}`)}
+          onError={(index) => (index.target.src = `${DefaultProfile}`)}
           alt={name}
         />
 

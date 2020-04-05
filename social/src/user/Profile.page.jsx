@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../auth";
 import { Redirect, Link } from "react-router-dom";
 import { read } from "./apiUser";
-import DefaultProfile from "../images/avatar.png";
+import DefaultProfile from "../assets/user.png";
 import DeleteUser from "./DeleteUser.component";
 import FollowProfileButton from "./FollowProfileButton.component";
 import ProfileTabs from "./ProfileTabs.component";
@@ -16,24 +16,24 @@ export default class Profile extends Component {
       redirectToSignin: false,
       following: false,
       error: "",
-      posts: []
+      posts: [],
     };
   }
 
   // check follow
-  checkFollow = user => {
+  checkFollow = (user) => {
     const jwt = isAuthenticated();
-    const match = user.followers.find(follower => {
+    const match = user.followers.find((follower) => {
       // one id has many other ids (followers) and vice versa
       return follower._id === jwt.user._id;
     });
     return match;
   };
 
-  clickFollowButton = callApi => {
+  clickFollowButton = (callApi) => {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().token;
-    callApi(userId, token, this.state.user._id).then(data => {
+    callApi(userId, token, this.state.user._id).then((data) => {
       if (data.error) {
         this.setState({ error: data.error });
       } else {
@@ -44,9 +44,9 @@ export default class Profile extends Component {
   };
 
   // runs when the entire component mounts
-  init = userId => {
+  init = (userId) => {
     const token = isAuthenticated().token;
-    read(userId, token).then(data => {
+    read(userId, token).then((data) => {
       if (data.error) {
         // user is not authenticated, ask them to sign in
         this.setState({ redirectToSignin: true });
@@ -59,9 +59,9 @@ export default class Profile extends Component {
     });
   };
 
-  loadPosts = userId => {
+  loadPosts = (userId) => {
     const token = isAuthenticated().token;
-    listByUser(userId, token).then(data => {
+    listByUser(userId, token).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -99,21 +99,21 @@ export default class Profile extends Component {
 
     return (
       <div className="container">
-        <h2 className="mt-5 mb-5">Profile</h2>
+        <h2 className="mt-5 mb-5">{user.name}'s Profile</h2>
         <div className="row">
           <div className="col-md-4">
             <img
               style={{ height: "200px", width: "auto" }}
               className="img-thumbnail"
               src={photoUrl}
-              onError={index => (index.target.src = `${DefaultProfile}`)}
+              onError={(index) => (index.target.src = `${DefaultProfile}`)}
               alt={user.name}
             />
           </div>
 
           <div className="col-md-8">
             <div className="lead mt-2">
-              <p>Hello {user.name}</p>
+              <p>Hello {user.name}!</p>
               <p>Email: {user.email}</p>
               <p>{`Joined ${new Date(user.created).toDateString()}`}</p>
             </div>

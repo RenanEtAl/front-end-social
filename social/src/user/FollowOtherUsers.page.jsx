@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import { findPeople, follow } from "./apiUser";
-import DefaultProfile from "../images/avatar.png";
+import DefaultProfile from "../assets/user.png";
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth";
+import Jumbotron from "../core/jumbotron-header.component";
 
-export default class FindPeople extends Component {
+export default class FollowOtherUsers extends Component {
   constructor() {
     super();
     this.state = {
       users: [],
       error: "",
-      open: false
+      open: false,
     };
   }
 
@@ -18,7 +19,7 @@ export default class FindPeople extends Component {
     // list the userrs
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().token;
-    findPeople(userId, token).then(data => {
+    findPeople(userId, token).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -31,7 +32,7 @@ export default class FindPeople extends Component {
     const userId = isAuthenticated().user._id;
     const token = isAuthenticated().token;
 
-    follow(userId, token, user._id).then(data => {
+    follow(userId, token, user._id).then((data) => {
       if (data.error) {
         this.setState({ error: data.error });
       } else {
@@ -40,13 +41,13 @@ export default class FindPeople extends Component {
         this.setState({
           users: toFollow,
           open: true,
-          followMessage: `Following ${user.name}`
+          followMessage: `You are now following ${user.name}.`,
         });
       }
     });
   };
 
-  renderUsers = users => (
+  renderUsers = (users) => (
     <div className="row">
       {this.state.users.map((user, index) => (
         <div className="card col-md-4" key={index}>
@@ -54,7 +55,7 @@ export default class FindPeople extends Component {
             style={{ height: "200px", width: "auto" }}
             className="img-thumbnail"
             src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
-            onError={index => (index.target.src = `${DefaultProfile}`)}
+            onError={(index) => (index.target.src = `${DefaultProfile}`)}
             alt={user.name}
           />
 
@@ -63,14 +64,14 @@ export default class FindPeople extends Component {
             <p className="card-text">{user.email}</p>
             <Link
               to={`/user/${user._id}`}
-              className="btn btn-raised btn-primary btn-sm"
+              className="btn btn-raised btn-dark btn-sm"
             >
               View Profile
             </Link>
 
             <button
               onClick={() => this.clickFollow(user, index)}
-              className="btn btn-raised btn-info float-right btn-sm"
+              className="btn btn-raised btn-dark float-right btn-sm"
             >
               Follow
             </button>
@@ -83,14 +84,17 @@ export default class FindPeople extends Component {
   render() {
     const { users, open, followMessage } = this.state;
     return (
-      <div className="container">
-        <h2 className="mt-5 mb-5">Find People</h2>
-        {open && (
-          <div className="alert alert-success">
-            {open && <p>{followMessage}</p>}
-          </div>
-        )}
-        {this.renderUsers()}
+      <div>
+        <Jumbotron />
+        <div className="container">
+          <h2 className="mt-5 mb-5">Follow Other Users</h2>
+          {open && (
+            <div className="alert alert-success">
+              {open && <p>{followMessage}</p>}
+            </div>
+          )}
+          {this.renderUsers()}
+        </div>
       </div>
     );
   }

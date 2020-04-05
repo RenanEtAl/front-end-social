@@ -1,13 +1,10 @@
 import React from "react";
 import Posts from "../../post/Posts.page";
 import "./Home.styles.css";
+import Jumbotron from "../jumbotron-header.component";
 const Home = () => (
   <div>
-    <div className="jumbotron jumbotron-bg">
-      <h2>Not Twitter</h2>
-      <p className="lead">Yours to discover</p>
-    </div>
-
+    <Jumbotron />
     <div className="container">
       <Posts />
     </div>

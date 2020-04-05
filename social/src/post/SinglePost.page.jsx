@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { singlePost, remove, like, unlike } from "./apiPost";
 import { Link, Redirect } from "react-router-dom";
-import DefaultPost from "../images/cat.jpg";
+import DefaultPost from "../assets/placeholder.png";
 import { isAuthenticated } from "../auth";
 import Comment from "./Comment.component";
+import SpinnerPage from "../core/spinner.component";
 
 export default class SinglePost extends Component {
   state = {
@@ -13,12 +14,12 @@ export default class SinglePost extends Component {
     like: false,
     likes: 0,
     redirectToSignin: false,
-    comments: []
+    comments: [],
   };
 
   componentDidMount = () => {
     const postId = this.props.match.params.postId;
-    singlePost(postId).then(data => {
+    singlePost(postId).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -27,13 +28,13 @@ export default class SinglePost extends Component {
           post: data,
           likes: data.likes.length,
           like: this.checkLike(data.likes),
-          comments: data.comments
+          comments: data.comments,
         });
       }
     });
   };
 
-  checkLike = likes => {
+  checkLike = (likes) => {
     const userId = isAuthenticated() && isAuthenticated().user._id;
     // indexOf method returns -1 if the userId is not found in the likes array
     // match is true if found, else false
@@ -44,7 +45,7 @@ export default class SinglePost extends Component {
   deletePost = () => {
     const postId = this.props.match.params.postId;
     const token = isAuthenticated().token;
-    remove(postId, token).then(data => {
+    remove(postId, token).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -72,22 +73,22 @@ export default class SinglePost extends Component {
     const postId = this.state.post._id;
     const token = isAuthenticated().token;
 
-    callApi(userId, token, postId).then(data => {
+    callApi(userId, token, postId).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
         this.setState({
           like: !this.state.like,
-          likes: data.likes.length
+          likes: data.likes.length,
         });
       }
     });
   };
-  updateComments = comments => {
+  updateComments = (comments) => {
     this.setState({ comments });
   };
 
-  renderPost = post => {
+  renderPost = (post) => {
     // when the name is clicked, take to the user profile
     const posterId = post.postedBy ? `/user/${post.postedBy._id}` : "";
     const posterName = post.postedBy ? post.postedBy.name : " Unknown";
@@ -98,9 +99,9 @@ export default class SinglePost extends Component {
         <img
           src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
           alt={post.title}
-          onError={index => (index.target.src = `${DefaultPost}`)}
-          className="img-thumbnail mb-3"
-          style={{ height: "300px", width: "100%", objectFit: "cover" }}
+          onError={(index) => (index.target.src = `${DefaultPost}`)}
+          className="img-fluid md-8 mb-3"
+          style={{ height: "auto", maxWidth: "100%" }}
         />
         {like ? (
           <h3 onClick={this.likeToggle}>
@@ -127,7 +128,10 @@ export default class SinglePost extends Component {
           on {new Date(post.created).toDateString()}
         </p>
         <div className="d-inline-block">
-          <Link to={`/`} className="btn btn-raised btn-primary btn-sm mr-5">
+          <Link
+            to={`/`}
+            className="btn-dark btn-raised btn-primary btn-sm mr-5"
+          >
             Back to posts
           </Link>
 
@@ -136,7 +140,7 @@ export default class SinglePost extends Component {
               <>
                 <Link
                   to={`/post/edit/${post._id}`}
-                  className="btn btn-raised btn-primary btn-sm mr-5"
+                  className="btn btn-dark btn-raised btn-primary btn-sm mr-5"
                 >
                   Update Post
                 </Link>
@@ -188,7 +192,7 @@ export default class SinglePost extends Component {
         <h2 className="display-2 mt-5 mb-5">{post.title}</h2>
         {!post ? (
           <div className="jumbotron text-center">
-            <h2>Loading...</h2>
+            <SpinnerPage />
           </div>
         ) : (
           this.renderPost(post)
