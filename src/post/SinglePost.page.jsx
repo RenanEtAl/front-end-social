@@ -114,7 +114,7 @@ export default class SinglePost extends Component {
         ) : (
           <h3 onClick={this.likeToggle}>
             <i
-              className="fa fa-thumbs-up text-warning"
+              className="fa fa-thumbs-up"
               style={{ padding: "10px", borderRadius: "50%" }}
             />{" "}
             {likes} Like
