@@ -26,10 +26,10 @@ export default class Users extends Component {
   renderUsers = (users) => (
     <div className="row">
       {this.state.users.map((user, index) => (
-        <div className="card col-md-4" key={index}>
+        <div className="col-lg-4 col-md-12 mb-4" key={index}>
           <img
             style={{ height: "200px", width: "100%" }}
-            className="img-thumbnail"
+            className="img-thumbnail mb-3"
             src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
             onError={(index) => (index.target.src = `${DefaultProfile}`)}
             alt={user.name}

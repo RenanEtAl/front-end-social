@@ -100,7 +100,7 @@ export default class SinglePost extends Component {
           src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
           alt={post.title}
           onError={(index) => (index.target.src = `${DefaultPost}`)}
-          className="img-fluid md-8 mb-3"
+          className="img-fluid md-8 mb-3 z-depth-5"
           style={{ height: "auto", maxWidth: "100%" }}
         />
         {like ? (
@@ -123,7 +123,7 @@ export default class SinglePost extends Component {
 
         <p className="card-text">{post.body}</p>
         <br />
-        <p className="font-italic mark">
+        <p className="font-italic">
           Posted by <Link to={`${posterId}`}>{posterName} </Link>
           on {new Date(post.created).toDateString()}
         </p>
